@@ -1,5 +1,7 @@
 # Question Resolver
 
+![Question Resolver Screenshot](images/your-image-name.png)
+
 A web application for managing nested questions, experiments, and their resolutions. Built with Flask and modern web technologies.
 
 ## Features
