@@ -48,7 +48,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-The application will be available at `http://localhost:5000`
+The application will be available at `http://localhost:5000/static/index.html`
 
 ## Technologies Used
 

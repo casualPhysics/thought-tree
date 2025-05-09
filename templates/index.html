@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garmin Route Tracker</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 0.5rem;
+        }
+        .route-card {
+            transition: all 0.3s ease;
+        }
+        .route-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Garmin Route Tracker</h1>
+            <p class="text-gray-600">Track and visualize your routes with detailed statistics</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Stats Section -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Statistics</h2>
+                    <div class="space-y-4">
+                        <div class="stat-card bg-blue-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-medium text-blue-800">Total Distance</h3>
+                            <p id="total-distance" class="text-2xl font-bold text-blue-600">0 km</p>
+                        </div>
+                        <div class="stat-card bg-green-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-medium text-green-800">Total Duration</h3>
+                            <p id="total-duration" class="text-2xl font-bold text-green-600">0h 0m</p>
+                        </div>
+                        <div class="stat-card bg-purple-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-medium text-purple-800">Total Elevation Gain</h3>
+                            <p id="total-elevation" class="text-2xl font-bold text-purple-600">0 m</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Section -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Upload Route</h2>
+                    <form id="upload-form" class="space-y-4">
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                            <input type="file" id="gpx-file" accept=".gpx" class="hidden">
+                            <label for="gpx-file" class="cursor-pointer">
+                                <div class="text-gray-600">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <p class="mt-1">Click to upload GPX file</p>
+                                </div>
+                            </label>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200">
+                            Upload Route
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Map and Routes Section -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Route Map</h2>
+                    <div id="map"></div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Recent Routes</h2>
+                    <div id="routes-list" class="space-y-4">
+                        <!-- Routes will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize map
+        const map = L.map('map').setView([0, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Load routes and update stats
+        async function loadRoutes() {
+            try {
+                const response = await fetch('/api/routes');
+                const routes = await response.json();
+                
+                // Update routes list
+                const routesList = document.getElementById('routes-list');
+                routesList.innerHTML = routes.map(route => `
+                    <div class="route-card bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-lg font-medium text-gray-800">${route.name}</h3>
+                        <div class="grid grid-cols-3 gap-4 mt-2">
+                            <div>
+                                <p class="text-sm text-gray-600">Distance</p>
+                                <p class="font-semibold">${route.distance.toFixed(2)} km</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Duration</p>
+                                <p class="font-semibold">${formatDuration(route.duration)}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Elevation</p>
+                                <p class="font-semibold">${route.elevation_gain.toFixed(0)} m</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Update map
+                routes.forEach(route => {
+                    const coordinates = JSON.parse(route.coordinates);
+                    const polyline = L.polyline(coordinates, { color: 'blue' }).addTo(map);
+                    map.fitBounds(polyline.getBounds());
+                });
+
+                // Update stats
+                const statsResponse = await fetch('/api/stats');
+                const stats = await statsResponse.json();
+                
+                document.getElementById('total-distance').textContent = `${stats.total_distance.toFixed(2)} km`;
+                document.getElementById('total-duration').textContent = formatDuration(stats.total_duration);
+                document.getElementById('total-elevation').textContent = `${stats.total_elevation.toFixed(0)} m`;
+            } catch (error) {
+                console.error('Error loading routes:', error);
+            }
+        }
+
+        // Format duration from seconds to hours and minutes
+        function formatDuration(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            return `${hours}h ${minutes}m`;
+        }
+
+        // Handle file upload
+        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById('gpx-file');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a GPX file');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/api/routes', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    fileInput.value = '';
+                    loadRoutes();
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Error uploading route');
+                }
+            } catch (error) {
+                console.error('Error uploading route:', error);
+                alert('Error uploading route');
+            }
+        });
+
+        // Initial load
+        loadRoutes();
+    </script>
+</body>
+</html> 
