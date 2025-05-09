@@ -1,6 +1,6 @@
 # Question Resolver
-A tool that I built to help me manage tasks, uncertainties and experiments. I'm trying this out as an alternative to standard goal and task setting to help 
-me deal with uncertainties better. 
+Have big, undefined goals? Here's a web application for managing nested questions, experiments, and their resolutions. 
+I'm trying this out as an alternative to standard goal and task setting to help me deal with uncertainties better. 
 
 I wrote about why I use this approach in [How do I achieve what I want](https://substack.com/home/post/p-162918993). 
 
@@ -13,7 +13,7 @@ STEPS
 
 ![Question Resolver Screenshot](images/example.png)
 
-A web application for managing nested questions, experiments, and their resolutions. Built with Flask. 
+uilt with Flask. 
 
 ## Features
 
