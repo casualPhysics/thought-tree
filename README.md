@@ -3,6 +3,7 @@ Have big, undefined goals? Here's a web application for managing nested question
 I'm trying this out as an alternative to standard goal and task setting to help me deal with uncertainties better. 
 
 I wrote about why I use this approach in [How do I achieve what I want](https://substack.com/home/post/p-162918993). 
+Everything's local, so your use will be completely private. 
 
 STEPS
 1. Write down a big question / uncertainty. 
