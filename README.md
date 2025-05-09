@@ -21,7 +21,7 @@ A web application for managing nested questions, experiments, and their resoluti
 1. Clone the repository:
 ```bash
 git clone https://github.com/casualPhysics/thought-tree.git
-cd question-resolver
+cd thought-tree
 ```
 
 2. Create and activate a virtual environment:
