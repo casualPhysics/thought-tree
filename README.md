@@ -13,7 +13,7 @@ STEPS
 
 ![Question Resolver Screenshot](images/example.png)
 
-uilt with Flask. 
+Built with Flask. 
 
 ## Features
 
