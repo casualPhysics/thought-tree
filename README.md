@@ -20,7 +20,7 @@ A web application for managing nested questions, experiments, and their resoluti
 
 1. Clone the repository:
 ```bash
-git clone [your-repo-url]
+git clone https://github.com/casualPhysics/thought-tree.git
 cd question-resolver
 ```
 
