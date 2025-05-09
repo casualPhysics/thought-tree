@@ -1,5 +1,5 @@
 # Question Resolver
-A tool that I built to help me manage uncertainties and experiments. I'm trying this out as an alternative to standard goal and task settings to help 
+A tool that I built to help me manage uncertainties and experiments. I'm trying this out as an alternative to standard goal and task setting to help 
 me deal with uncertainties better. 
 
 I wrote about why I designed this approach in [How do I achieve what I want](https://substack.com/home/post/p-162918993). 
