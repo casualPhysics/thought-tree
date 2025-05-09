@@ -1,8 +1,15 @@
 # Question Resolver
-A tool that I built to help me manage uncertainties and experiments. I'm trying this out as an alternative to standard goal and task setting to help 
+A tool that I built to help me manage tasks, uncertainties and experiments. I'm trying this out as an alternative to standard goal and task setting to help 
 me deal with uncertainties better. 
 
-I wrote about why I designed this approach in [How do I achieve what I want](https://substack.com/home/post/p-162918993). 
+I wrote about why I use this approach in [How do I achieve what I want](https://substack.com/home/post/p-162918993). 
+
+STEPS
+1. Write down a big question / uncertainty. 
+2. That question is likely to have sub-questions. Using the '+' button, add those as well. 
+3. Keep nesting those questions until you feel like they are sufficiently well defined for an experiment. 
+4. Add those experiments in the 'To resolve' section. 
+5. Tick off those experiments, and update your answers as you go along!
 
 ![Question Resolver Screenshot](images/example.png)
 
