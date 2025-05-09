@@ -17,7 +17,11 @@ async function loadQuestions() {
     try {
         const response = await fetch(`${API_BASE}/questions`);
         const questions = await response.json();
-        renderQuestions(questions);
+        questionsTree.innerHTML = ''; // Clear the tree first
+        questions.forEach(question => {
+            const questionElement = createQuestionElement(question, 0);
+            questionsTree.appendChild(questionElement);
+        });
     } catch (error) {
         console.error('Error loading questions:', error);
     }
@@ -157,12 +161,16 @@ function createQuestionElement(question, level) {
 
     // Set up to-resolve form
     const toResolveForm = questionItem.querySelector('.add-to-resolve-form');
+    let isSubmitting = false; // Add flag to prevent duplicate submissions
     toResolveForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (isSubmitting) return; // Prevent duplicate submissions
+        
         const input = toResolveForm.querySelector('input');
         const text = input.value.trim();
         if (text) {
             try {
+                isSubmitting = true; // Set flag before submission
                 const response = await fetch(`${API_BASE}/questions/${question.id}/to-resolve`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -174,6 +182,8 @@ function createQuestionElement(question, level) {
                 input.value = '';
             } catch (error) {
                 console.error('Error adding to-resolve item:', error);
+            } finally {
+                isSubmitting = false; // Reset flag after submission
             }
         }
     });
@@ -398,18 +408,5 @@ async function addAnswer(questionId, text) {
     return response.json();
 }
 
-// Add event listener for to-resolve forms
-document.addEventListener('submit', (e) => {
-    if (e.target.classList.contains('add-to-resolve-form')) {
-        e.preventDefault();
-        const input = e.target.querySelector('input');
-        const text = input.value.trim();
-        if (text) {
-            const questionItem = e.target.closest('.question-item');
-            const toResolveList = questionItem.querySelector('.to-resolve-list');
-            const li = createToResolveItem(text);
-            toResolveList.appendChild(li);
-            input.value = '';
-        }
-    }
-}); 
+// Initial load
+loadQuestions(); 
