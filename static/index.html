@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Resolver</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="container mx-auto px-4 py-4">
+        <h1 class="text-2xl font-bold mb-4 text-green-400">Question Resolver</h1>
+        
+        <!-- Add Root Question Form -->
+        <div class="bg-gray-800 rounded border border-gray-700 p-3 mb-4">
+            <form id="rootQuestionForm" class="flex gap-2">
+                <input type="text" id="rootQuestionText" class="flex-1 bg-gray-700 text-gray-100 border border-gray-600 rounded px-2 py-1 focus:outline-none focus:border-green-500" placeholder="Add new root question">
+                <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Add</button>
+            </form>
+        </div>
+
+        <!-- Questions Tree -->
+        <div id="questionsTree" class="space-y-1"></div>
+    </div>
+
+    <!-- Question Template -->
+    <template id="questionTemplate">
+        <div class="question-item bg-gray-800 rounded border border-gray-700 p-2">
+            <div class="flex items-start gap-2">
+                <button class="fold-btn text-gray-400 hover:text-gray-200 mt-1">
+                    <svg class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2">
+                        <input type="text" class="question-text w-full bg-transparent border-b border-transparent hover:border-gray-600 focus:border-green-500 focus:outline-none px-1 py-0.5 text-sm" value="">
+                        <button class="add-child-btn text-xs bg-gray-700 text-gray-300 px-2 py-0.5 rounded hover:bg-gray-600">+</button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="date" class="time-frame bg-transparent border-b border-transparent hover:border-gray-600 focus:border-green-500 focus:outline-none px-1 text-xs text-gray-400" placeholder="time frame">
+                        <span class="time-remaining text-xs text-gray-400"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Container -->
+            <div class="question-content">
+                <!-- To Resolve Section -->
+                <div class="to-resolve-section mt-2 text-xs">
+                    <div class="flex items-center gap-1 text-gray-400 mb-1">
+                        <span class="font-medium">To Resolve:</span>
+                        <form class="add-to-resolve-form flex-1">
+                            <input type="text" class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-0.5 text-xs focus:outline-none focus:border-green-500" placeholder="Add item to resolve">
+                        </form>
+                    </div>
+                    <ul class="to-resolve-list space-y-1 pl-4"></ul>
+                </div>
+
+                <!-- Current Answer Section -->
+                <div class="current-answer-section mt-2 text-xs">
+                    <div class="flex items-center gap-1 text-gray-400 mb-1">
+                        <span class="font-medium">Answer:</span>
+                        <form class="add-answer-form flex-1">
+                            <textarea class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-xs focus:outline-none focus:border-green-500" placeholder="Add or update answer" rows="2"></textarea>
+                        </form>
+                    </div>
+                    <div class="current-answer-text bg-gray-700 rounded px-2 py-1 text-xs"></div>
+                </div>
+
+                <!-- Children Container -->
+                <div class="children-container mt-2 pl-4"></div>
+            </div>
+        </div>
+    </template>
+
+    <script src="app.js"></script>
+</body>
+</html> 
