@@ -408,5 +408,34 @@ async function addAnswer(questionId, text) {
     return response.json();
 }
 
+// Export as markdown
+document.getElementById('exportMarkdownBtn').addEventListener('click', async () => {
+    try {
+        const response = await fetch(`${API_BASE}/export/markdown`);
+        const data = await response.json();
+        
+        // Create a temporary textarea to copy the markdown
+        const textarea = document.createElement('textarea');
+        textarea.value = data.markdown;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        
+        // Show a temporary success message
+        const btn = document.getElementById('exportMarkdownBtn');
+        const originalText = btn.textContent;
+        btn.textContent = 'Copied to clipboard!';
+        btn.classList.add('bg-green-600');
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove('bg-green-600');
+        }, 2000);
+    } catch (error) {
+        console.error('Error exporting markdown:', error);
+        alert('Failed to export markdown. Please try again.');
+    }
+});
+
 // Initial load
 loadQuestions(); 

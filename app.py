@@ -163,6 +163,47 @@ def delete_to_resolve(question_id, to_resolve_id):
     db.session.commit()
     return jsonify({'message': 'To-resolve item deleted successfully'})
 
+def format_question_as_markdown(question, level=0):
+    indent = '\t' * level
+    markdown = []
+    
+    # Add question text with time frame if present
+    question_text = f"**{question.text}**"
+    if question.time_frame:
+        question_text += f" ({question.time_frame})"
+    if question.status == 'done':
+        question_text += " (Done)"
+    markdown.append(f"{indent}- {question_text}")
+    
+    # Add to-resolve items if any
+    if question.to_resolve:
+        markdown.append(f"{indent}\t- TO RESOLVE:")
+        for item in question.to_resolve:
+            status = "[x]" if item.completed else "[]"
+            markdown.append(f"{indent}\t\t- {item.text} {status}")
+    
+    # Add current answer if present
+    if question.current_answer:
+        markdown.append(f"{indent}\t- CURRENT ANSWER")
+        markdown.append(f"{indent}\t\t- {question.current_answer.text}")
+    
+    # Add children recursively
+    for child in question.children:
+        markdown.extend(format_question_as_markdown(child, level + 1))
+    
+    return markdown
+
+@app.route('/api/export/markdown', methods=['GET'])
+def export_markdown():
+    root_questions = Question.query.filter_by(parent_id=None).all()
+    markdown_lines = []
+    
+    for question in root_questions:
+        markdown_lines.extend(format_question_as_markdown(question))
+    
+    markdown_text = '\n'.join(markdown_lines)
+    return jsonify({'markdown': markdown_text})
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True, use_reloader=False) 

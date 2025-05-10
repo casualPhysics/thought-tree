@@ -11,12 +11,13 @@
     <div class="container mx-auto px-4 py-4">
         <h1 class="text-2xl font-bold mb-4 text-green-400">Question Resolver</h1>
         
-        <!-- Add Root Question Form -->
-        <div class="bg-gray-800 rounded border border-gray-700 p-3 mb-4">
+        <!-- Add Export Button -->
+        <div class="flex justify-between items-center mb-4">
             <form id="rootQuestionForm" class="flex gap-2">
                 <input type="text" id="rootQuestionText" class="flex-1 bg-gray-700 text-gray-100 border border-gray-600 rounded px-2 py-1 focus:outline-none focus:border-green-500" placeholder="Add new root question">
                 <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Add</button>
             </form>
+            <button id="exportMarkdownBtn" class="bg-gray-700 text-gray-300 px-4 py-1 rounded hover:bg-gray-600">Export as Markdown</button>
         </div>
 
         <!-- Questions Tree -->

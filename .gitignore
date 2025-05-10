@@ -43,3 +43,5 @@ instance/
 .Trashes
 ehthumbs.db
 Thumbs.db 
+# SpecStory explanation file
+.specstory/.what-is-this.md
