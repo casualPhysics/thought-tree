@@ -48,7 +48,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-The application will be available at `http://localhost:5000/static/index.html`
+The application will be available at `http://localhost:8000/`. The root URL now serves `index.html` directly, and other static files are served from `/static/`.
 
 ## Technologies Used
 
@@ -85,4 +85,4 @@ The application uses:
 
 ## License
 
-MIT License 
+MIT License
