@@ -1,5 +1,5 @@
 // API endpoints
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'http://localhost:8000/api';
 
 // DOM Elements
 const rootQuestionForm = document.getElementById('rootQuestionForm');
@@ -438,4 +438,4 @@ document.getElementById('exportMarkdownBtn').addEventListener('click', async () 
 });
 
 // Initial load
-loadQuestions(); 
+loadQuestions();

@@ -1,11 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Configure SQLite database with more robust settings
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///questions.db'
@@ -16,6 +16,10 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
 }
 
 db = SQLAlchemy(app)
+
+@app.route('/')
+def serve_index():
+    return send_from_directory('static', 'index.html')
 
 # Ensure the database file exists
 def init_db():
@@ -206,4 +210,4 @@ def export_markdown():
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, use_reloader=False) 
+    app.run(debug=True, use_reloader=False, port=8000)
